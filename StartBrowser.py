@@ -9,7 +9,7 @@ def Start_Lap(browser_name="EntertainBuddy"):
     # Initialization of web Driver
     opt = Options()
     # This option is used to verify the action part without starting from beginning
-    # opt.add_experimental_option('debuggerAddress',"localhost:1135")
+    opt.add_experimental_option('debuggerAddress',"localhost:1135")
     # CMD prompt is chrome.exe --remote-debugging-port=1135 --user-data-dir="E:\Hackathon\BrowserChromes\Youtube\UpgradeBuddy"
     path_of_browser = os.path.dirname(__file__) + '/%s' % browser_name
     print(path_of_browser)
