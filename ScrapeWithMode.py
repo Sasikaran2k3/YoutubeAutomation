@@ -50,7 +50,7 @@ def StartScrape(mode):
             break
 
 
-def additional_images(img_desc, flag=0, no_of_images=4):
+def additional_images(img_desc, flag=0, no_of_images=6):
     # img_desc = "The ruling could require Apple to allow developers to provide external payment options"
     browser.get("https://www.google.com/imghp")
     browser.find_element(By.XPATH, "//textarea[@type='search']").click()

@@ -2,14 +2,13 @@ import os
 import StartBrowser
 import time
 import datetime
-from pyautogui import typewrite
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 
 def ErrorCorrection():
-    browser = StartBrowser.Start_Lap("EntertainBuddy")
+    browser = StartBrowser.Start_Lap("UpgradeBuddy")
     browser.get("https://studio.youtube.com/")
     input()
 #ErrorCorrection()
@@ -61,7 +60,7 @@ def InstaUplaod():
     act.move_to_element((browser.find_element(By.XPATH, '//div[@aria-label="Write a caption..."]'))).perform()
     act.double_click()
     # act.click((browser.find_element(By.XPATH, '//div[@aria-label="Write a caption..."]'))).perform()
-    act.send_keys("Wait for it ! " + desc + link + my_hash)
+    act.send_keys("Wait for it ! " + desc + link + yt_hashtags)
     act.perform()
     """for i in desc+link+yt_hashtags:
         browser.find_element(By.XPATH, '//div[@aria-label="Write a caption..."]').send_keys(i)"""
@@ -84,12 +83,13 @@ while True:
         content = f.readlines()
         print(content)
         title = content[0]
-        desc = "Open the link to know more details\n"
+        desc = "\nOpen the link to know more details\n"
         link = content[1]
+        Ai_hash = open(os.path.dirname(__file__) + "/Data/" +date+"_hash.txt","r").read()
         my_hash = " #entertainbuddy #entertainment #latestnews #trending "
-        yt_hashtags = my_hash #" ".join(["#"+i.text for i in hash_result]) + my_hash
+        yt_hashtags = "\n"+Ai_hash + my_hash #" ".join(["#"+i.text for i in hash_result]) + my_hash
         print(yt_hashtags)
-        YoutubeUpload()
+        #YoutubeUpload()
         InstaUplaod()
     except Exception as e:
         print(e)
@@ -111,7 +111,7 @@ title = content[0]
 desc = content[1]
 link = content[2]
 data = os.path.dirname(__file__) + "/" + date + ".mp4"
-my_hash = " #upgradebuddy #technology #gadget #gadgetnews "
+my_hash = " #Entertainbuddy #technology #gadget #gadgetnews "
 yt_hashtags = my_hash #" ".join(["#"+i.text for i in hash_result]) + my_hash
 browser.get("https://www.instagram.com/")
 browser.find_element(By.CSS_SELECTOR, 'svg[aria-label="New post"]').click()

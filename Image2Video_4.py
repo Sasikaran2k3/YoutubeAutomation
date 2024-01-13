@@ -1,6 +1,7 @@
 import datetime
 import os
 import time
+import moviepy
 from moviepy.editor import *
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -11,22 +12,13 @@ import StartBrowser
 
 def ErrorCorrection():
     date = "".join(str(datetime.date.today()).split("-"))
-    # MakeVideo()
-    browser = StartBrowser.Start_Lap("EntertainBuddy")
-    browser.get("https://www.kapwing.com/videos/6572d86bff0f2ec6d5afd509")
-    wait = WebDriverWait(browser, 1000)
-    wait.until(expected_conditions.visibility_of_element_located(
-        (By.XPATH, '//div[@class="VideoContainer-module_commentsMetaDataFileSize_E7zW4"]')))
-    time.sleep(5)
-    print("Download Available")
-    while True:
-        no_of_item = len(os.listdir(os.path.dirname(__file__) +"/Data"))
-        browser.find_element(By.XPATH, '//span[text() = "Download file" ]').click()
-        time.sleep(3)
-        if os.listdir(os.path.dirname(__file__) +"/Data") != no_of_item:
-            print("Download Started")
-            break
-    print("Completed Successfully")
+    background_image = moviepy.editor.ImageClip(os.path.dirname(__file__) + "/Background3.jpg")
+    background = background_image.resize((1080, 1920)).set_duration(3)
+    background_image = moviepy.editor.ImageClip(os.path.dirname(__file__) + "/Background2.png")
+    background1 = background_image.resize((900, 1500)).set_duration(3).set_position((90,350))
+    out = CompositeVideoClip([background, background1])
+    out.write_videofile(os.path.dirname(__file__) + "/%s.mp4" % date, fps=24)
+    #MakeVideo()
     quit()
 
 
@@ -109,18 +101,18 @@ def KapwingEdit():
 
 def ImageAnimation(ImageClip, duration, flag):
     # Load the image
-    image = ImageClip("Background1.png")
-
+    image = ImageClip
+    #background_image = moviepy.editor.ImageClip("Background1.png")
     # Set the desired duration in seconds (e.g., 10 seconds)
     duration = duration
 
     # Calculate the canvas dimensions (9:16 aspect ratio)
-    canvas_width = 1080
-    canvas_height = 1920
+    canvas_width = 900
+    canvas_height = 1300
 
     # Resize the image to have a height of 1920 pixels and maintain its original aspect ratio
-    resized_image = image.resize(height=1860)
-
+    resized_image = image.resize(height=1300)
+    #background = background_image.resize(height = 1920)
     # Create a black background clip with the canvas dimensions
     background = ColorClip(size=(canvas_width, canvas_height), color=(0, 0, 0))
 
@@ -176,13 +168,19 @@ def MakeVideo():
         pic_num = i % 4
         print(pic_num)
         img = ImageClip(os.path.dirname(__file__) + "/Data/%s_%d.png" % (date, pic_num))
-        #img = img.set_duration(1)
-        #img = img.set_fps(24)
         img = ImageAnimation(img, divider, flag="L" if i % 2 == 0 else "R")
         final.append(img)
+        
 
     # Combine all the small video to full video
-    out = concatenate(final,method="compose")
+    background_image = moviepy.editor.ImageClip(os.path.dirname(__file__) +"/Background3.jpg")
+    print(divider*shift_count)
+    background = background_image.resize((1080,1920)).set_duration(divider * shift_count)
+    out = concatenate(final,method="compose").set_position((90,350))
+    out = CompositeVideoClip([background, out])
+    out = out.set_audio(CompositeAudioClip([audio, back]).set_duration(divider*shift_count))
+    out.write_videofile(os.path.dirname(__file__) + "/%s.mp4" % date, fps=24)
+    return
     out = out.set_audio(CompositeAudioClip([audio, back]))
     out.duration = divider * shift_count + 0.5
     print(out.duration)
